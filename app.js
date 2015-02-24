@@ -62,8 +62,11 @@
     },
 
     render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      // this.$el.html(this.template());
+      var self = this;
+      this.$el.empty();
+      this.collection.each(function(list) {
+      self.$el.append(self.template(list.toJSON()));
+    });
       return this;
     }
 
