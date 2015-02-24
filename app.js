@@ -1,3 +1,9 @@
+(function() {
+  'use strict';
+
+  window.App = window.App || {};
+
+
 $.ajaxSetup({
   headers: {
     "X-Parse-Application-Id" : "K4zLqJj9DKABboTYQLeVyeQVBlhqOtJO7CrTQIEq",
@@ -5,12 +11,16 @@ $.ajaxSetup({
   }
 });
 
+
+//////////Model/Collection//////////
+
+
 var Link = Backbone.Model.extend ({
   idAttribute: 'objectId',
 
   defaults: function(attributes) {
     attributes = attributes || {};
-    return _.defaults(attributes, {
+    return _.defaults( opts, {
 
     title: 'default',
     url: 'default',
@@ -27,17 +37,53 @@ var Links = Backbone.Collection.extend ({
   parse: function(response) { return response.results; }
 });
 
+
+
+//////////Views//////////
+
+
 var LinksView = Backbone.View.extend({
   template: _.template($('#link-template').text()),
   tagName: 'li',
-  
-  initialize: function() {
 
+  initialize: function() {
+    $('#container').append(this.el);
   },
 
   render: function() {
     this.$el.html(this.template());
-    return this;
+    // this.$el.html(this.template());
+    // return this;
   }
 
 });
+
+
+
+//////////Router//////////
+
+
+var AppRouter = Backbone.Router.extend({
+  routes: {
+    '': 'index',
+
+  },
+
+    index: function() {
+      console.log('router');
+      this.LinksView = new LinksView();
+      this.LinksView.render();
+    }
+});
+
+
+
+//////////Glue Code//////////
+
+
+$(document).ready(function() {
+   window.router = new AppRouter();
+   Backbone.history.start();
+ });
+
+}());
