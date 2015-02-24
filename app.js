@@ -20,7 +20,7 @@ var Link = Backbone.Model.extend ({
 
   defaults: function(attributes) {
     attributes = attributes || {};
-    return _.defaults( opts, {
+    return _.defaults( attributes, {
 
     title: 'default',
     url: 'default',
@@ -45,13 +45,13 @@ var Links = Backbone.Collection.extend ({
 var LinksView = Backbone.View.extend({
   template: _.template($('#link-template').text()),
   tagName: 'li',
-
+  model: new Link(),
   initialize: function() {
     $('#container').append(this.el);
   },
 
   render: function() {
-    this.$el.html(this.template());
+    this.$el.html(this.template(this.model.toJSON()));
     // this.$el.html(this.template());
     // return this;
   }
@@ -70,7 +70,8 @@ var AppRouter = Backbone.Router.extend({
   },
 
     index: function() {
-      console.log('router');
+      // console.log('router');
+      this.link = new Link();
       this.LinksView = new LinksView();
       this.LinksView.render();
     }
